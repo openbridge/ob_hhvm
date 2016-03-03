@@ -1,0 +1,7 @@
+check process hhvm with pidfile "/var/run/hhvm/hhvm.pid"
+      start program = "/etc/init.d/hhvm start"
+      stop program = "/etc/init.d/hhvm stop"
+      if failed port 8000 for 2 cycles then restart
+      if cpu > 90% for 8 cycles then restart
+      if memory > 400.0 MB for 8 cycles then restart
+      if 5 restarts within 10 cycles then timeout
