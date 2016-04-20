@@ -72,6 +72,7 @@ RUN rpm -Uvh http://mirrors.linuxeye.com/hhvm-repo/7/x86_64/hhvm-3.12.1-1.el7.ce
 #       hhvm --version
 
 ADD etc/hhvm/server.ini /etc/hhvm/server.ini
+ADD etc/hhvm/php.ini /etc/hhvm/php.ini
 
 ###################
 # NETWORK
