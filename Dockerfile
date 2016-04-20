@@ -11,7 +11,7 @@
 ##  Copyright (C) 2015 Openbridge, Inc. - All Rights Reserved
 ##  Permission to copy and modify is granted under the Apache license 2.0
 ##  Last revised 01/20/2015
-##  version 0.1
+##  version 0.2
 ##
 
 ###################
@@ -35,51 +35,41 @@ VOLUME ["/ebs"]
 ###################
 
 # Add the latests EPEL 7 Repo
-RUN yum install epel-release -y ;\
+RUN yum install epel-release -y
 
-    # Run the update with the EPEL 7 Repo
-    yum update -y ;\
+# Run the update with the EPEL 7 Repo
+RUN yum update -y
 
     # Install the required packages
-    yum install -y \
-        cpp \
-        gcc-c++ \
-        cmake \
-        wget \
-        git \
-        initscripts \
-        curl \
-        cronie \
-        psmisc \
-        {binutils,boost,jemalloc}-devel \
-        {ImageMagick,sqlite,tbb,bzip2,openldap,readline,elfutils-libelf,gmp,lz4,pcre}-devel \
-        lib{xslt,event,yaml,vpx,png,zip,icu,mcrypt,memcached,cap,dwarf}-devel \
-        {unixODBC,expat,mariadb}-devel \
-        lib{edit,curl,xml2,xslt}-devel \
-        glog-devel \
-        oniguruma-devel \
-        ocaml \
-        gperf \
-        enca \
-        libjpeg-turbo-devel \
-        openssl-devel \
-        mariadb \
-        mariadb-server \
-        make ;\
+RUN yum install -y \
+    cpp gcc-c++ cmake git psmisc {binutils,boost,jemalloc,numactl}-devel \
+    {ImageMagick,sqlite,tbb,bzip2,openldap,readline,elfutils-libelf,gmp,lz4,pcre}-devel \
+    lib{xslt,event,yaml,vpx,png,zip,icu,mcrypt,memcached,cap,dwarf}-devel \
+    {unixODBC,expat,mariadb}-devel lib{edit,curl,xml2,xslt}-devel \
+    glog-devel oniguruma-devel ocaml gperf enca libjpeg-turbo-devel openssl-devel \
+    mariadb mariadb-server make \
+    inotify-tools \
+    geoip \
+    zeromq-devel \
+    inotify-tools-devel \
+    {fribidi,libc-client}-devel
 
 ###################
 # HHVM
 ###################
 
-       cd /tmp ;\
-       git clone https://github.com/facebook/hhvm -b master  hhvm  --recursive ;\
-       cd hhvm ;\
-       cmake . ;\
-       make -j$(($(nproc)+1)) ;\
-       ./hphp/hhvm/hhvm --version ;\
-       make install ;\
-       mkdir -p /var/run/hhvm ;\
-       hhvm --version
+#RUN rpm -Uvh http://dl.fedoraproject.org/pub/epel/7/x86_64/i/inotify-tools-devel-3.14-8.el7.x86_64.rpm
+RUN rpm -Uvh http://mirrors.linuxeye.com/hhvm-repo/7/x86_64/hhvm-3.12.1-1.el7.centos.x86_64.rpm
+
+#RUN    cd /tmp ;\
+#       git clone https://github.com/facebook/hhvm -b master  hhvm  --recursive ;\
+#       cd hhvm ;\
+#       cmake . ;\
+#       make -j$(($(nproc)+1)) ;\
+#       ./hphp/hhvm/hhvm --version ;\
+#       make install ;\
+#       mkdir -p /var/run/hhvm ;\
+#       hhvm --version
 
 ADD etc/hhvm/server.ini /etc/hhvm/server.ini
 
@@ -97,10 +87,11 @@ EXPOSE 2879
 # MONIT
 ###################
 
-ENV MONIT_VERSION 5.15
+ENV MONIT_VERSION 5.17.1
 
 # Add Monit binary
 RUN mkdir -p /tmp/monit ;\
+    yum install wget -y ;\
     cd /tmp/monit ;\
     wget https://bitbucket.org/tildeslash/monit/downloads/monit-${MONIT_VERSION}-linux-x64.tar.gz ;\
     tar -xf monit* && cd monit* ;\
@@ -131,7 +122,7 @@ RUN groupadd nginx ;\
     useradd -u 2011 -s /bin/false -d /bin/null -c "nginx user" -g nginx nginx
 
 # When this is present it prevents crond from running
-RUN sed -i '/session    required   pam_loginuid.so/d' /etc/pam.d/crond
+#RUN sed -i '/session    required   pam_loginuid.so/d' /etc/pam.d/crond
 
 # Setup the Init services
 COPY etc/init.d/* /etc/init.d/

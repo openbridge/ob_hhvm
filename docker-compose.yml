@@ -1,17 +1,17 @@
 php-fpm:
-  image: openbridge/php-fpm
+  image: openbridge/hhvm
   volumes:
     - /ebs:/ebs
   environment:
     - ob_mode=aws
-    - ob_tag=php-fpm
+    - ob_tag=hhvm
   ports:
-    - "9000:9000"
+    - "8000:8000"
   expose:
-    - 9000
+    - 8000
   restart: always
   tty: true
-  container_name: php-fpm
+  container_name: hhvm
   ulimits:
     nproc: 65535
     nofile:
