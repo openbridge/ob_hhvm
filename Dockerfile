@@ -58,8 +58,9 @@ RUN yum install -y \
 # HHVM
 ###################
 
+
 #RUN rpm -Uvh http://dl.fedoraproject.org/pub/epel/7/x86_64/i/inotify-tools-devel-3.14-8.el7.x86_64.rpm
-RUN rpm -Uvh http://mirrors.linuxeye.com/hhvm-repo/7/x86_64/hhvm-3.12.1-1.el7.centos.x86_64.rpm
+RUN rpm -Uvh http://mirrors.linuxeye.com/hhvm-repo/7/x86_64/hhvm-3.13.2-1.el7.centos.x86_64.rpm
 
 #RUN    cd /tmp ;\
 #       git clone https://github.com/facebook/hhvm -b master  hhvm  --recursive ;\
@@ -88,7 +89,7 @@ EXPOSE 2879
 # MONIT
 ###################
 
-ENV MONIT_VERSION 5.17.1
+ENV MONIT_VERSION 5.19.0
 
 # Add Monit binary
 RUN mkdir -p /tmp/monit ;\
