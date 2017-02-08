@@ -58,11 +58,10 @@ RUN yum install -y \
 # HHVM
 ###################
 
+RUN rpm -Uvh http://mirrors.linuxeye.com/hhvm-repo/7/x86_64/hhvm-3.15.3-1.el7.centos.x86_64.rpm
 
-#RUN rpm -Uvh http://dl.fedoraproject.org/pub/epel/7/x86_64/i/inotify-tools-devel-3.14-8.el7.x86_64.rpm
-RUN rpm -Uvh http://mirrors.linuxeye.com/hhvm-repo/7/x86_64/hhvm-3.13.2-1.el7.centos.x86_64.rpm
-
-#RUN    cd /tmp ;\
+# Compile directly
+# RUN    cd /tmp ;\
 #       git clone https://github.com/facebook/hhvm -b master  hhvm  --recursive ;\
 #       cd hhvm ;\
 #       cmake . ;\
